@@ -29,7 +29,7 @@ docsApp.directive.ngHtmlWrapLoaded = function(reindentCode, templateMerge, loade
             module: '',
             body: element.text()
           },
-        html = "<!doctype html>\n<html ng-app{{module}}>\n  <head>\n{{head:4}}  </head>\n  <body>\n{{body:4}}  </body>\n</html>";
+        html = "{{body:4}}";
 
       angular.forEach(loadedUrls.base, function(dep) {
         properties.head += '<script src="' + dep + '"></script>\n';
