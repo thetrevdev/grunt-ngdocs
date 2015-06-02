@@ -30,14 +30,14 @@ function processJsFile(content, file, section, options) {
   lines.forEach(function(line, lineNumber){
     lineNumber++;
     // is the comment starting?
-    if (!inDoc && (match = line.match(/^\s*\/\*\*\s*(.*)$/))) {
-      line = match[1];
+    if (!inDoc && (match = line.match(/^\s*(\/\*\*|###\*)\s*(.*)$/))) {
+      line = match[2];
       inDoc = true;
       text = [];
       startingLine = lineNumber;
     }
     // are we done?
-    if (inDoc && line.match(/\*\//)) {
+    if (inDoc && line.match(/\*\/|###/)) {
       text = text.join('\n');
       text = text.replace(/^\n/, '');
       if (text.match(/@ngdoc/)){

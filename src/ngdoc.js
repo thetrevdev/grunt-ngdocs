@@ -963,13 +963,9 @@ Doc.prototype = {
 
 //////////////////////////////////////////////////////////
 var GLOBALS = /^angular\.([^\.]+)$/,
-    MODULE = /^([^\.]+)$/,
+    MODULE = /^([^:]+)$/,
     MODULE_MOCK = /^angular\.mock\.([^\.]+)$/,
-    MODULE_CONTROLLER = /^(.+)\.controllers?:([^\.]+)$/,
-    MODULE_DIRECTIVE = /^(.+)\.directives?:([^\.]+)$/,
-    MODULE_DIRECTIVE_INPUT = /^(.+)\.directives?:input\.([^\.]+)$/,
-    MODULE_CUSTOM = /^(.+)\.([^\.]+):([^\.]+)$/,
-    MODULE_SERVICE = /^(.+)\.([^\.]+?)(Provider)?$/,
+    MODULE_CUSTOM = /^(.+):(.*?)(Provider)?$/,
     MODULE_TYPE = /^([^\.]+)\..+\.([A-Z][^\.]+)$/;
 
 
@@ -1014,22 +1010,14 @@ function title(doc) {
     return makeTitle(overview ? '' : match[1], '', 'module', match[1]);
   } else if (match = text.match(MODULE_MOCK)) {
     return makeTitle('angular.mock.' + match[1], 'API', 'module', 'ng');
-  } else if (match = text.match(MODULE_CONTROLLER) && doc.type === 'controller') {
-    return makeTitle(match[2], 'controller', 'module', match[1]);
-  } else if (match = text.match(MODULE_DIRECTIVE)) {
-    return makeTitle(match[2], 'directive', 'module', match[1]);
-  } else if (match = text.match(MODULE_DIRECTIVE_INPUT)) {
-    return makeTitle('input [' + match[2] + ']', 'directive', 'module', match[1]);
   } else if (match = text.match(MODULE_CUSTOM)) {
-    return makeTitle(match[3], doc.ngdoc || match[2], 'module', match[1]);
-  } else if (match = text.match(MODULE_TYPE) && doc.ngdoc === 'type') {
-    return makeTitle(match[2], 'type', 'module', module || match[1]);
-  } else if (match = text.match(MODULE_SERVICE)) {
     if (overview) {
       // module name with dots looks like a service
       return makeTitle('', '', 'module', text);
     }
-    return makeTitle(match[2] + (match[3] || ''), 'service', 'module', module || match[1]);
+    return makeTitle(match[2]+ (match[3] || ''), doc.ngdoc, 'module', match[1]);
+  } else if (match = text.match(MODULE_TYPE) && doc.ngdoc === 'type') {
+    return makeTitle(match[2], 'type', 'module', module || match[1]);
   }
   return text;
 }
