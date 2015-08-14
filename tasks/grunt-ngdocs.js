@@ -232,6 +232,7 @@ module.exports = function(grunt) {
     setup.startPage = options.startPage;
     setup.discussions = options.discussions;
     setup.scripts = _.map(options.scripts, function(url) { return path.basename(url); });
+    setup.styles = _.map(options.styles, function(url) { return path.basename(url); });
     grunt.file.write(setup.__file, 'NG_DOCS=' + JSON.stringify(setup, replacer, 2) + ';');
   }
 

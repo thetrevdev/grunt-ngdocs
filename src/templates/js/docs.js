@@ -120,9 +120,23 @@ docsApp.serviceFactory.loadedUrls = function($document) {
     }
   });
 
+  angular.forEach($document.find('link'), function(style) {
+    var match = style.href.match(/^.*\/([^\/]*\.css)$/);
+    if (match) {
+      urls[match[1].replace(/(\-\d.*)?(\.min)?\.css$/, '.css')] = match[0];
+    }
+  });
+
   urls.base = [];
   angular.forEach(NG_DOCS.scripts, function(script) {
     var match = urls[script.replace(/(\-\d.*)?(\.min)?\.js$/, '.js')];
+    if (match) {
+      urls.base.push(match);
+    }
+  });
+
+  angular.forEach(NG_DOCS.styles, function(style) {
+    var match = urls[style.replace(/(\-\d.*)?(\.min)?\.css/, '.css')];
     if (match) {
       urls.base.push(match);
     }
@@ -148,7 +162,7 @@ docsApp.serviceFactory.formPostData = function($document) {
 
 docsApp.serviceFactory.openPlunkr = function(templateMerge, formPostData, loadedUrls) {
   return function(content) {
-    var allFiles = [].concat(content.js, content.css, content.html);
+    var allFiles = [].concat(loadedUrls.base, content.js, content.css, content.html);
     var indexHtmlContent = '<!doctype html>\n' +
         '<html ng-app="{{module}}">\n' +
         '  <head>\n' +
@@ -159,15 +173,13 @@ docsApp.serviceFactory.openPlunkr = function(templateMerge, formPostData, loaded
         '  </body>\n' +
         '</html>\n';
     var scriptDeps = '';
-    angular.forEach(loadedUrls.base, function(url) {
-        scriptDeps += '    <script src="' + url + '"></script>\n';
-    });
     angular.forEach(allFiles, function(file) {
-      var ext = file.name.split(/\./).pop();
+      var fileName = file.name ? file.name : file;
+      var ext = fileName.split(/\./).pop();
         if (ext == 'css') {
-          scriptDeps += '    <link rel="stylesheet" href="' + file.name + '" type="text/css">\n';
-        } else if (ext == 'js' && file.name !== 'angular.js') {
-        scriptDeps += '    <script src="' + file.name + '"></script>\n';
+          scriptDeps += '    <link rel="stylesheet" href="' + fileName + '" type="text/css">\n';
+        } else if (ext == 'js' && fileName !== 'angular.js') {
+        scriptDeps += '    <script src="' + fileName + '"></script>\n';
       }
     });
     indexProp = {
