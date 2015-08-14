@@ -42,10 +42,10 @@ ngdocs: {
     image: "path/to/my/image.png",
     imageLink: "http://my-domain.com",
     titleLink: "/api",
+    inlinePartials: true,
     bestMatch: true,
     analytics: {
-          account: 'UA-08150815-0',
-          domainName: 'my-domain.com'
+          account: 'UA-08150815-0'
     },
     discussions: {
           shortName: 'my',
@@ -113,6 +113,10 @@ Include 'js/angular-bootstrap.js', 'js/angular-bootstrap-prettify.js', 'js/docs-
 
 Copy additional css files to the documentation app
 
+#### template
+[default] null
+
+Allow to use your own template. Use the default template at src/templates/index.tmpl as reference.
 
 #### startPage
 [default] '/api'
@@ -201,6 +205,11 @@ Display "Improve this doc" link. Same options as for sourceLink.
 
 Show Edit Button for examples.
 
+#### inlinePartials
+[default] false
+
+If set to true this option will turn all partials into angular inline templates and place them inside the generated `index.html` file.
+The advantage over lazyloading with ajax is that the documentation will also work on the `file://` system.
 
 #### discussions
 Optional include [discussions](http://disqus.com) in the documentation app.
@@ -218,8 +227,7 @@ Optional include Google Analytics in the documentation app.
 
 ```js
 {
-  account: 'UA-08150815-0',
-  domainName: 'my-domain.com'
+  account: 'UA-08150815-0'
 }
 ```
 
